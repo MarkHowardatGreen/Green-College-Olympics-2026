@@ -14,7 +14,7 @@ st.set_page_config(
 
 #grab Olympics point submissions
 api_key = 'sk_prod_jdzrsSN1iDS7X1nPqDKdIPqhUM1baZWa17uT7pMq4g9erNbHrkNNtyoWmByQxDLwVYUwDeBPqlb4BLpqizr78qXMYh0flpof3h3_27197'
-form_id = 'vsGn68PP3Fus'
+form_id = 'ksBq8tvCYQus'
 
 # Construct the API endpoint URL
 url = f'https://api.fillout.com/v1/api/forms/{form_id}/submissions'
