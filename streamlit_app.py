@@ -154,8 +154,13 @@ for submission in all_responses:
     rows.append(row)
 
 df = pd.DataFrame(rows)
+
+# Remove duplicate columns
+df = df.loc[:, ~df.columns.duplicated()]
+
 df = df.drop(columns=df.columns[-1])
 df = df.drop(df.index[:8])
+
 df['Team']=df['Name'].map(team_membership)
 
 st.write(f"Total number of records: {len(all_responses)}")
@@ -177,9 +182,16 @@ def compute_points(row):
     
     activity = row['Activity']
     intensity = row['Level of intensity']
-    minutes = row['Number of minutes']
+
+    # Convert safely to numeric
+    minutes = pd.to_numeric(row['Number of minutes'], errors='coerce')
+    games = pd.to_numeric(row['How many games did you win?'], errors='coerce')
+
     social = row['Did you complete this activity with at least one other Resident Member?']
     games = row['How many games did you win?']
+    
+    if pd.isna(minutes):
+        return 0
     
     if activity not in activity_multipliers:
         return 0  # or fallback value
@@ -204,7 +216,6 @@ df['points'] = df.apply(compute_points, axis=1)
 
 
 # st.dataframe(df)
-
 
 teamPoints = df.groupby('Team')['points'].sum().reset_index()
 teamPoints = teamPoints.rename(columns={'points': 'Total Points'})
